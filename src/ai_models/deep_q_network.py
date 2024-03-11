@@ -31,6 +31,7 @@ class DeepQNetwork(AbstractAI):
         """
         assert board.turn == self.color, "It's not my turn"
         nn_info_array = to_info_array(board)
+        
         pass
 
     def available_moves(self, board: chess.Board):
@@ -41,14 +42,18 @@ class DeepQNetwork(AbstractAI):
         """
         return list(board.legal_moves)
 
-    def q_values(self, board: chess.Board):
+    def q_values(self, board_information: np.ndarray):
         """_summary_ q values function
 
         Args:
             board (_type_): _description_ chess board
         """
-        return self.network
+        return self.network.foward(th.from_numpy(board_information))
 
+    def v_values(self, board_information: np.ndarray):
+        return self.q_values(board_information).max()
+    
+    
     def update(
         self,
         board: chess.Board,
